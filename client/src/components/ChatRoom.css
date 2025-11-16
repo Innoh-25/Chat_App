@@ -1,0 +1,136 @@
+.chat-room {
+  min-height: 100vh;
+  width: 100vw;
+  background: var(--background-darker);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mobile Header */
+.mobile-header {
+  display: none;
+  background: var(--background-light);
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menu-toggle {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+}
+
+.menu-toggle:hover {
+  background: var(--background-lighter);
+}
+
+.menu-toggle svg {
+  width: 24px;
+  height: 24px;
+}
+
+.mobile-header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Chat Layout */
+.chat-layout {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Sidebar */
+.sidebar-container {
+  position: relative;
+  width: 300px;
+  background: var(--background-light);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+}
+
+/* Main Chat Area */
+.chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--background-dark);
+}
+
+.chat-header {
+  background: var(--background-light);
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.room-info h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.room-description {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .mobile-header {
+    display: flex;
+  }
+
+  .chat-header {
+    display: none;
+  }
+
+  .sidebar-container {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    bottom: 0;
+    z-index: 999;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar-container.open {
+    left: 0;
+  }
+
+  .sidebar-container.open .sidebar-overlay {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar-container {
+    width: 280px;
+  }
+}
