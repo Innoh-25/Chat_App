@@ -57,7 +57,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 // Respond to preflight requests
-app.options('*', cors(corsOptions));
+// Use '/*' rather than '*' so path-to-regexp (used by Express) accepts the route
+app.options('/*', cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(session({
