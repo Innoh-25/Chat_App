@@ -20,10 +20,20 @@ dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
+// CORS / allowed origins
+const allowedOrigins = [
+  process.env.CLIENT_URL || 'http://localhost:5173'
+].filter(Boolean);
+
 const io = new Server(server, {
   cors: {
-    origin: '*',
-    methods: ['GET', 'POST', 'DELETE'],
+    origin: (origin, callback) => {
+      // Allow requests with no origin (eg. curl, Postman, server-to-server)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error('Not allowed by CORS'));
+    },
+    methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
     credentials: true,
   },
 });
@@ -32,10 +42,22 @@ const io = new Server(server, {
 connectDB();
 
 // Middleware
-app.use(cors({
-  origin:'*',
-  credentials: true
-}));
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (curl, Postman, server-side requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Set-Cookie', 'X-Requested-With'],
+  exposedHeaders: ['Authorization']
+};
+
+app.use(cors(corsOptions));
+// Respond to preflight requests
+app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(session({
